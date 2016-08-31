@@ -159,6 +159,7 @@ namespace CharMagic
 
         private void CurseFile()
         {
+            // TODO
         }
 
         private void CurseString()
