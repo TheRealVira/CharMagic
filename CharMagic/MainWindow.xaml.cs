@@ -90,6 +90,7 @@ namespace CharMagic
             SearchFileBtn.Visibility = Visibility.Visible;
             OutputTxtBx.Visibility = Visibility.Visible;
             OutputhFileBtn.Visibility = Visibility.Visible;
+
             OutputCard.Visibility = Visibility.Hidden;
         }
 
@@ -98,6 +99,7 @@ namespace CharMagic
             SearchFileBtn.Visibility = Visibility.Hidden;
             OutputTxtBx.Visibility = Visibility.Hidden;
             OutputhFileBtn.Visibility = Visibility.Hidden;
+
             OutputCard.Visibility = Visibility.Visible;
         }
 
