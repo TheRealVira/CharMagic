@@ -38,11 +38,11 @@
                               ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="False"
                               Checked="CurseFileCkBx_Checked" Unchecked="CurseFileCkBx_Unchecked" />
                 <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Bottom" x:Name="InputTxtBx"
-                         Margin="10,0,159,10" TextChanged="InputTxtBx_TextChanged" />
+                         Margin="10,0,245,10" TextChanged="InputTxtBx_TextChanged" />
 
-                <Label x:Name="SplitterLbl" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,68,9">Splitter:</Label>
+                <Label x:Name="SplitterLbl" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,165,9">Splitter:</Label>
                 <TextBox HorizontalAlignment="Right" VerticalAlignment="Bottom" x:Name="SplitterTxtBx"
-                         Margin="10,0,10,10" Width="50" TextChanged="SplitterTxtBx_TextChanged" />
+                         Margin="10,0,10,10" Width="150" TextChanged="SplitterTxtBx_TextChanged" />
             </Grid>
         </materialDesign:Card>
 
@@ -68,11 +68,31 @@
                 FontWeight="Bold" FontSize="22" Click="CurseBtn_Click">
             CURSE!
         </Button>
+        <Button x:Name="LiftCurseBtn" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,163,10,0"
+                Width="150"
+                FontWeight="Bold" FontSize="22" Click="LiftCurseBtn_OnClickCurseBtn_Click">
+            Lift curse
+        </Button>
 
         <materialDesign:Card VerticalAlignment="Stretch" Margin="3,120,3,3" x:Name="OutputCard">
             <Grid>
+                <Button x:Name="CopyBtn" Margin="344,6,370,0" Height="32" VerticalAlignment="Top"
+                        HorizontalAlignment="Center" Width="166" Click="CopyBtn_OnClickBTN_Click"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Visibility="Visible">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentCopy" />
+                        <TextBlock Margin="8 0 0 0">Copy Cursed Text</TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <Label x:Name="SpeedLbl" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,324,0">Speed :</Label>
+                <Slider x:Name="SpeedSlider" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,14,10,0"
+                        Width="300" Minimum="1" Maximum="10" Value="5" />
                 <Label x:Name="OutputLbl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">Output :</Label>
-                <TextBlock HorizontalAlignment="Stretch" x:Name="OutputTxtBlck" Margin="10,41,10,10" />
+                <TextBlock HorizontalAlignment="Stretch" x:Name="OutputTxtBlck" Margin="10,41,10,10"
+                           TextWrapping="Wrap" />
             </Grid>
         </materialDesign:Card>
     </Grid>

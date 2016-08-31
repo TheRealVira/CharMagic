@@ -6,7 +6,7 @@
 // Project: CharMagic
 // Filename: MainWindow.xaml.cs
 // Date - created:2016.08.31 - 11:40
-// Date - current: 2016.08.31 - 15:08
+// Date - current: 2016.08.31 - 18:18
 
 #endregion
 
@@ -23,6 +23,8 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using CharMagicLib;
+using Clipboard = System.Windows.Clipboard;
+using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 #endregion
@@ -42,7 +44,7 @@ namespace CharMagic
         {
             InitializeComponent();
 
-            SplitterTxtBx.Text = " ";
+            SplitterTxtBx.Text = " /[&\\/#,+()$~%.\'\":*?<>{}]/g,\'_\'";
             _curses = new Dictionary<string, CharMagicAPI>();
 
             Loadplugin();
@@ -126,54 +128,111 @@ namespace CharMagic
 
             if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
-                OutputTxtBx.Text = fbd.SelectedPath;
+                OutputTxtBx.Text = fbd.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(InputTxtBx.Text) +
+                                   ".cursed";
             }
         }
 
         private void SplitterTxtBx_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (SplitterTxtBx.Text.Length > 1)
-            {
-                SplitterTxtBx.Text = SplitterTxtBx.Text.Substring(0, 1);
-            }
-            else if (SplitterTxtBx.Text.Length == 0)
-            {
-                SplitterTxtBx.Text = " ";
-            }
+            //if (SplitterTxtBx.Text.Length > 1)
+            //{
+            //    SplitterTxtBx.Text = SplitterTxtBx.Text.Substring(0, 1);
+            //}
+            //else if (SplitterTxtBx.Text.Length == 0)
+            //{
+            //    SplitterTxtBx.Text = " ";
+            //}
         }
 
         private void CurseBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (CurseFileCkBx.IsChecked == true)
-            {
-                if (File.Exists(InputTxtBx.Text) && Directory.Exists(OutputTxtBx.Text))
-                {
-                    CurseFile();
-                }
+            CurseOrNot(true);
+        }
 
-                return;
+        private void CurseFile(bool curse)
+        {
+            // Create File without locking
+            using (
+                var writeStream = File.Create(OutputTxtBx.Text))
+            {
+                writeStream.Flush();
+                writeStream.Close();
+                writeStream.Dispose();
             }
 
-            CurseString();
+            using (
+                var writer = new StreamWriter(OutputTxtBx.Text)
+                )
+            {
+                using (var readStream = new StreamReader(InputTxtBx.Text))
+                {
+                    while (!readStream.EndOfStream)
+                    {
+                        var line = readStream.ReadLine();
+                        var splitted = line.ToCharArray();
+                        var toDisplay = string.Empty;
+
+                        for (var i = 0; i < splitted.Length; i++)
+                        {
+                            var current = string.Empty;
+                            var next = string.Empty;
+                            while (i < splitted.Length)
+                            {
+                                if (SplitterTxtBx.Text.Contains(splitted[i]))
+                                {
+                                    next = splitted[i] + "";
+                                    break;
+                                }
+
+                                current += splitted[i];
+                                i++;
+                            }
+
+                            toDisplay += (curse
+                                ? _curses[(string) CursesCmbBx.SelectedItem].Curse(current)
+                                : _curses[(string) CursesCmbBx.SelectedItem].LiftCurse(current)) + next;
+                        }
+
+                        writer.WriteLine(toDisplay);
+                    }
+
+                    readStream.Close();
+                    readStream.Dispose();
+                }
+
+                writer.Close();
+                writer.Dispose();
+            }
         }
 
-        private void CurseFile()
-        {
-            // TODO
-        }
-
-        private void CurseString()
+        private void CurseString(bool curse)
         {
             if (_isBussy) return;
 
             _isBussy = true;
-            var splitted = InputTxtBx.Text.Split(Convert.ToChar(SplitterTxtBx.Text));
+            var splitted = InputTxtBx.Text.ToCharArray();
             var toDisplay = string.Empty;
 
             for (var i = 0; i < splitted.Length; i++)
             {
-                toDisplay += _curses[(string) CursesCmbBx.SelectedItem].Curse(splitted[i]) +
-                             (i != splitted.Length - 1 ? SplitterTxtBx.Text : "");
+                var current = string.Empty;
+                var next = string.Empty;
+                while (i < splitted.Length)
+                {
+                    if (SplitterTxtBx.Text.Contains(splitted[i]))
+                    {
+                        next = splitted[i] + "";
+                        break;
+                    }
+
+                    current += splitted[i];
+                    i++;
+                }
+
+                toDisplay += (curse
+                    ? _curses[(string) CursesCmbBx.SelectedItem].Curse(current)
+                    : _curses[(string) CursesCmbBx.SelectedItem].LiftCurse(current)) + next;
             }
 
             var output = new char[toDisplay.Length];
@@ -193,13 +252,19 @@ namespace CharMagic
 
                         if (output[i1] < toDisplay[i1])
                         {
-                            output[i1] += Convert.ToChar((int) Math.Ceiling((toDisplay[i1] - output[i1])/2f));
+                            SpeedSlider.Dispatcher.Invoke(() =>
+                                output[i1] +=
+                                    Convert.ToChar((int) Math.Ceiling((toDisplay[i1] - output[i1])/SpeedSlider.Value))
+                                );
                             OutputTxtBlck.Dispatcher.Invoke(() => { OutputTxtBlck.Text = new string(output); },
                                 DispatcherPriority.Render);
                             continue;
                         }
 
-                        output[i1] -= Convert.ToChar((int) Math.Ceiling((output[i1] - toDisplay[i1])/2f));
+                        SpeedSlider.Dispatcher.Invoke(() =>
+                            output[i1] -=
+                                Convert.ToChar((int) Math.Ceiling((output[i1] - toDisplay[i1])/SpeedSlider.Value))
+                            );
                         OutputTxtBlck.Dispatcher.Invoke(() => { OutputTxtBlck.Text = new string(output); },
                             DispatcherPriority.Render);
                     }
@@ -212,6 +277,44 @@ namespace CharMagic
         private void InputTxtBx_TextChanged(object sender, TextChangedEventArgs e)
         {
             OutputTxtBlck.Text = InputTxtBx.Text;
+        }
+
+        private void LiftCurseBtn_OnClickCurseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CurseOrNot(false);
+        }
+
+        private void CurseOrNot(bool curse)
+        {
+            if (CurseFileCkBx.IsChecked == true)
+            {
+                if (File.Exists(InputTxtBx.Text) && Directory.Exists(Path.GetDirectoryName(OutputTxtBx.Text)) &&
+                    !File.Exists(OutputTxtBx.Text))
+                {
+                    CurseFile(curse);
+                }
+                else if (File.Exists(InputTxtBx.Text))
+                {
+                    MessageBox.Show($"The file {OutputTxtBx.Text} currently exists and won't be overwritten!");
+                }
+                else if (Directory.Exists(Path.GetDirectoryName(OutputTxtBx.Text)))
+                {
+                    MessageBox.Show($"The directory {Path.GetDirectoryName(OutputTxtBx.Text)} doesn't exist!");
+                }
+                else if (!File.Exists(OutputTxtBx.Text))
+                {
+                    MessageBox.Show($"The file {InputTxtBx.Text} doesn't exist!");
+                }
+
+                return;
+            }
+
+            CurseString(curse);
+        }
+
+        private void CopyBtn_OnClickBTN_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(OutputTxtBlck.Text);
         }
     }
 }

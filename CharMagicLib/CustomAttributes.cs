@@ -6,7 +6,7 @@
 // Project: CharMagicLib
 // Filename: CustomAttributes.cs
 // Date - created:2016.08.31 - 11:54
-// Date - current: 2016.08.31 - 15:08
+// Date - current: 2016.08.31 - 18:18
 
 #endregion
 

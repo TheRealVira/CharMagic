@@ -6,7 +6,7 @@
 // Project: ExamplePlugin
 // Filename: SecondCurse.cs
 // Date - created:2016.08.31 - 12:09
-// Date - current: 2016.08.31 - 15:08
+// Date - current: 2016.08.31 - 18:18
 
 #endregion
 
@@ -30,7 +30,7 @@ namespace ExamplePlugin
         {
             if (input.Length < 4) return input;
 
-            return input.Substring(0, 1) + input.Substring(input.Length - 2, 1) + input.Substring(3, input.Length - 3) +
+            return input.Substring(0, 1) + input.Substring(input.Length - 2, 1) + input.Substring(3, input.Length - 4) +
                    input.Substring(1, 1) + input.Substring(input.Length - 1);
         }
 

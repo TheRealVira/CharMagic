@@ -6,7 +6,7 @@
 // Project: ExamplePlugin
 // Filename: FirstCurse.cs
 // Date - created:2016.08.31 - 11:56
-// Date - current: 2016.08.31 - 15:08
+// Date - current: 2016.08.31 - 18:18
 
 #endregion
 

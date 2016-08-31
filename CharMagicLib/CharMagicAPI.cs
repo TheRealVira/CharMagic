@@ -6,7 +6,7 @@
 // Project: CharMagicLib
 // Filename: CharMagicAPI.cs
 // Date - created:2016.08.31 - 11:42
-// Date - current: 2016.08.31 - 15:08
+// Date - current: 2016.08.31 - 18:18
 
 #endregion
 
