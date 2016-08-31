@@ -316,5 +316,10 @@ namespace CharMagic
         {
             Clipboard.SetText(OutputTxtBlck.Text);
         }
+
+        private void InfoBtn_OnClickBtn_OnClickBTN_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(_curses[(string) CursesCmbBx.SelectedItem].ToString());
+        }
     }
 }

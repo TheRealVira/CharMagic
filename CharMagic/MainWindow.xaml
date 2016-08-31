@@ -55,6 +55,16 @@
                 <TextBlock Margin="8 0 0 0">Select where to output the file</TextBlock>
             </StackPanel>
         </Button>
+
+        <Button x:Name="InfoBtn" Margin="130,162,0,0" Height="32" VerticalAlignment="Top"
+                HorizontalAlignment="Left" Width="58" Click="InfoBtn_OnClickBtn_OnClickBTN_Click"
+                materialDesign:ShadowAssist.ShadowDepth="Depth3" Style="{StaticResource MaterialDesignFlatButton}"
+                Visibility="Visible">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Information" />
+            </StackPanel>
+        </Button>
+        
         <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="OutputTxtBx" Visibility="Hidden"
                  Margin="267,127,10,0" />
 
