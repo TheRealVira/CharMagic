@@ -6,7 +6,7 @@
 // Project: CharMagic
 // Filename: UltimateFactory.cs
 // Date - created:2016.08.31 - 12:06
-// Date - current: 2016.08.31 - 18:18
+// Date - current: 2016.09.01 - 12:25
 
 #endregion
 

@@ -6,7 +6,7 @@
 // Project: CharMagic
 // Filename: MainWindow.xaml.cs
 // Date - created:2016.08.31 - 11:40
-// Date - current: 2016.08.31 - 18:18
+// Date - current: 2016.09.01 - 12:25
 
 #endregion
 
@@ -46,7 +46,8 @@ namespace CharMagic
 
             SplitterTxtBx.Text = " /[&\\/#,+()$~%.\'\":*?<>{}]/g,\'_\'";
             _curses = new Dictionary<string, CharMagicAPI>();
-
+            _curses.Add("Crucio", new Crucio());
+            CursesCmbBx.Items.Add("Crucio");
             Loadplugin();
         }
 
@@ -76,7 +77,7 @@ namespace CharMagic
                     }
                     else
                     {
-                        // If not, than it gets a bit complicater:
+                        // If not, than it gets a bit complicated:
                         // Now we have to invoke the dispatcher of the control from its current thread to access it.
                         CursesCmbBx.Dispatcher.Invoke(DispatcherPriority.Normal,
                             new Action(() => CursesCmbBx.Items.Add(x.Key)));
@@ -90,8 +91,8 @@ namespace CharMagic
         private void CurseFileCkBx_Checked(object sender, RoutedEventArgs e)
         {
             SearchFileBtn.Visibility = Visibility.Visible;
-            OutputTxtBx.Visibility = Visibility.Visible;
-            OutputhFileBtn.Visibility = Visibility.Visible;
+            OutputTxtBx.Visibility = File.Exists(InputTxtBx.Text) ? Visibility.Visible : Visibility.Hidden;
+            OutputhFileBtn.Visibility = File.Exists(InputTxtBx.Text) ? Visibility.Visible : Visibility.Hidden;
 
             OutputCard.Visibility = Visibility.Hidden;
         }
@@ -212,6 +213,7 @@ namespace CharMagic
 
             _isBussy = true;
             var splitted = InputTxtBx.Text.ToCharArray();
+            var output = splitted;
             var toDisplay = string.Empty;
 
             for (var i = 0; i < splitted.Length; i++)
@@ -235,7 +237,6 @@ namespace CharMagic
                     : _curses[(string) CursesCmbBx.SelectedItem].LiftCurse(current)) + next;
             }
 
-            var output = new char[toDisplay.Length];
 
             Task.Factory.StartNew(() =>
             {
@@ -254,7 +255,8 @@ namespace CharMagic
                         {
                             SpeedSlider.Dispatcher.Invoke(() =>
                                 output[i1] +=
-                                    Convert.ToChar((int) Math.Ceiling((toDisplay[i1] - output[i1])/SpeedSlider.Value))
+                                    Convert.ToChar(
+                                        (int) Math.Ceiling((toDisplay[i1] - output[i1])/(SpeedSlider.Value/10)))
                                 );
                             OutputTxtBlck.Dispatcher.Invoke(() => { OutputTxtBlck.Text = new string(output); },
                                 DispatcherPriority.Render);
@@ -263,7 +265,7 @@ namespace CharMagic
 
                         SpeedSlider.Dispatcher.Invoke(() =>
                             output[i1] -=
-                                Convert.ToChar((int) Math.Ceiling((output[i1] - toDisplay[i1])/SpeedSlider.Value))
+                                Convert.ToChar((int) Math.Ceiling((output[i1] - toDisplay[i1])/(SpeedSlider.Value/10)))
                             );
                         OutputTxtBlck.Dispatcher.Invoke(() => { OutputTxtBlck.Text = new string(output); },
                             DispatcherPriority.Render);
@@ -276,6 +278,22 @@ namespace CharMagic
 
         private void InputTxtBx_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (CurseFileCkBx.IsChecked == true)
+            {
+                if (File.Exists(InputTxtBx.Text))
+                {
+                    OutputhFileBtn.Visibility = Visibility.Visible;
+                    OutputTxtBx.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    OutputhFileBtn.Visibility = Visibility.Hidden;
+                    OutputTxtBx.Visibility = Visibility.Hidden;
+                }
+
+                return;
+            }
+
             OutputTxtBlck.Text = InputTxtBx.Text;
         }
 
@@ -288,23 +306,33 @@ namespace CharMagic
         {
             if (CurseFileCkBx.IsChecked == true)
             {
-                if (File.Exists(InputTxtBx.Text) && Directory.Exists(Path.GetDirectoryName(OutputTxtBx.Text)) &&
-                    !File.Exists(OutputTxtBx.Text))
+                if (!File.Exists(InputTxtBx.Text))
                 {
-                    CurseFile(curse);
+                    MessageBox.Show($"The input file \"{OutputTxtBx.Text}\" doesn't exist, or is blocked!");
+                    return;
                 }
-                else if (File.Exists(InputTxtBx.Text))
+
+                try
                 {
-                    MessageBox.Show($"The file {OutputTxtBx.Text} currently exists and won't be overwritten!");
+                    if (!Directory.Exists(Path.GetDirectoryName(OutputTxtBx.Text)))
+                    {
+                        MessageBox.Show($"The output path \"{OutputTxtBx.Text}\" doesn't exist, or is blocked!");
+                        return;
+                    }
                 }
-                else if (Directory.Exists(Path.GetDirectoryName(OutputTxtBx.Text)))
+                catch
                 {
-                    MessageBox.Show($"The directory {Path.GetDirectoryName(OutputTxtBx.Text)} doesn't exist!");
+                    MessageBox.Show($"The output path \"{OutputTxtBx.Text}\" doesn't exist, or is blocked!");
+                    return;
                 }
-                else if (!File.Exists(OutputTxtBx.Text))
+
+                if (File.Exists(OutputTxtBx.Text))
                 {
-                    MessageBox.Show($"The file {InputTxtBx.Text} doesn't exist!");
+                    MessageBox.Show($"The output file \"{OutputTxtBx.Text}\" currently exists and won't be overwritten!");
+                    return;
                 }
+
+                CurseFile(curse);
 
                 return;
             }

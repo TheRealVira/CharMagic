@@ -6,7 +6,7 @@
 // Project: CharMagic
 // Filename: AssemblyInfo.cs
 // Date - created:2016.08.31 - 11:40
-// Date - current: 2016.08.31 - 18:18
+// Date - current: 2016.09.01 - 12:25
 
 #endregion
 

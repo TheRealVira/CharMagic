@@ -35,12 +35,15 @@
                 <Label x:Name="CurseFileLbl" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="797,10,10,0">Curse a file</Label>
                 <ToggleButton x:Name="CurseFileCkBx" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
                               VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,13,88,0"
-                              ToolTip="MaterialDesignSwitchAccentToggleButton" IsChecked="False"
+                              ToolTip="If you want to curse filse -> TRIGGER ME!" IsChecked="False"
                               Checked="CurseFileCkBx_Checked" Unchecked="CurseFileCkBx_Unchecked" />
                 <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Bottom" x:Name="InputTxtBx"
                          Margin="10,0,245,10" TextChanged="InputTxtBx_TextChanged" />
 
-                <Label x:Name="SplitterLbl" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,165,9">Splitter:</Label>
+                <Label x:Name="SplitterLbl" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,165,9"
+                       ToolTip="Those symbols will split your sentence, so the curse is able to focus on single words.">
+                    Splitter:
+                </Label>
                 <TextBox HorizontalAlignment="Right" VerticalAlignment="Bottom" x:Name="SplitterTxtBx"
                          Margin="10,0,10,10" Width="150" TextChanged="SplitterTxtBx_TextChanged" />
             </Grid>
@@ -59,12 +62,12 @@
         <Button x:Name="InfoBtn" Margin="130,162,0,0" Height="32" VerticalAlignment="Top"
                 HorizontalAlignment="Left" Width="58" Click="InfoBtn_OnClickBtn_OnClickBTN_Click"
                 materialDesign:ShadowAssist.ShadowDepth="Depth3" Style="{StaticResource MaterialDesignFlatButton}"
-                Visibility="Visible">
+                Visibility="Visible" ToolTip="Get information about the curse">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="Information" />
             </StackPanel>
         </Button>
-        
+
         <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="OutputTxtBx" Visibility="Hidden"
                  Margin="267,127,10,0" />
 
@@ -86,7 +89,7 @@
 
         <materialDesign:Card VerticalAlignment="Stretch" Margin="3,120,3,3" x:Name="OutputCard">
             <Grid>
-                <Button x:Name="CopyBtn" Margin="344,6,370,0" Height="32" VerticalAlignment="Top"
+                <Button x:Name="CopyBtn" Margin="344,15,370,0" Height="32" VerticalAlignment="Top"
                         HorizontalAlignment="Center" Width="166" Click="CopyBtn_OnClickBTN_Click"
                         materialDesign:ShadowAssist.ShadowDepth="Depth3"
                         Style="{StaticResource MaterialDesignFlatButton}"
@@ -97,11 +100,12 @@
                     </StackPanel>
                 </Button>
 
-                <Label x:Name="SpeedLbl" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,324,0">Speed :</Label>
-                <Slider x:Name="SpeedSlider" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,14,10,0"
-                        Width="300" Minimum="1" Maximum="10" Value="5" />
-                <Label x:Name="OutputLbl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">Output :</Label>
-                <TextBlock HorizontalAlignment="Stretch" x:Name="OutputTxtBlck" Margin="10,41,10,10"
+                <Label x:Name="SpeedLbl" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,19,318,0">Speed :</Label>
+                <Slider x:Name="SpeedSlider" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0"
+                        Width="300" Minimum="10" Maximum="100" Value="50" ToolTip="Higher is slower"
+                        Style="{StaticResource MaterialDesignDiscreteSlider}" />
+                <Label x:Name="OutputLbl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,19,0,0">Output :</Label>
+                <TextBlock HorizontalAlignment="Stretch" x:Name="OutputTxtBlck" Margin="10,56,10,10"
                            TextWrapping="Wrap" />
             </Grid>
         </materialDesign:Card>
