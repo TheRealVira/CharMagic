@@ -35,7 +35,7 @@
                 <Label x:Name="CurseFileLbl" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="797,10,10,0">Curse a file</Label>
                 <ToggleButton x:Name="CurseFileCkBx" Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
                               VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,13,88,0"
-                              ToolTip="If you want to curse filse -> TRIGGER ME!" IsChecked="False"
+                              ToolTip="If you want to curse files -> TRIGGER ME!" IsChecked="False"
                               Checked="CurseFileCkBx_Checked" Unchecked="CurseFileCkBx_Unchecked" />
                 <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Bottom" x:Name="InputTxtBx"
                          Margin="10,0,245,10" TextChanged="InputTxtBx_TextChanged" />
