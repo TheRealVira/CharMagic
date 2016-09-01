@@ -44,7 +44,7 @@ namespace CharMagic
         {
             InitializeComponent();
 
-            SplitterTxtBx.Text = " /[&\\/#,+()$~%.\'\":*?<>{}]/g,\'_\'";
+            SplitterTxtBx.Text = " /[&\\/#,+()$~%.\'\":*!?<>{}]/g,\'_\'";
             _curses = new Dictionary<string, CharMagicAPI>();
             _curses.Add("Crucio", new Crucio());
             CursesCmbBx.Items.Add("Crucio");
